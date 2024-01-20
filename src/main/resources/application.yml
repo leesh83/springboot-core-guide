@@ -1,3 +1,4 @@
+#springdoc - swagger
 springdoc:
   packages-to-scan: kevin.springboot.core.guide.controller
   default-consumes-media-type: application/json;charset=UTF-8
