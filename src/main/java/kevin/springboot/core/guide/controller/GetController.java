@@ -1,5 +1,6 @@
 package kevin.springboot.core.guide.controller;
 
+import kevin.springboot.core.guide.dto.MemberDto;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,18 +12,21 @@ public class GetController {
         return "kevin";
     }
 
-    //@PathVariable
+
     @GetMapping("/path-variable/{variable}")
     public String getVariable(@PathVariable String variable){
         return variable;
     }
 
-    //@RequestParam
     @GetMapping("/request-param")
     public String getRequestParam(@RequestParam String name,
                                   @RequestParam String email){
         return name + ", " + email;
     }
 
+    @GetMapping("/request-dto")
+    public String getRequestDto(MemberDto dto){
+        return dto.toString();
+    }
 
 }
