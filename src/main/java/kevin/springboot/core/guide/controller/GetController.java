@@ -24,6 +24,7 @@ public class GetController {
         return name + ", " + email;
     }
 
+    //dto 타입으로 requestParam 데이터를 매핑하는것도 가능하다.
     @GetMapping("/request-dto")
     public String getRequestDto(MemberDto dto){
         return dto.toString();
