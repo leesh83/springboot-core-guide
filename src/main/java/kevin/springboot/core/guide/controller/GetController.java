@@ -26,16 +26,16 @@ public class GetController {
 
     @Operation(summary = "requestParam으로 매핑받기 api")
     @GetMapping("/request-param")
-    public String getRequestParam(@Parameter(name = "이름") @RequestParam String name,
-                                  @Parameter(name = "이메일") @RequestParam String email) {
+    public String getRequestParam(@Parameter(description = "이름", example = "kevin") @RequestParam String name,
+                                  @Parameter(description = "이메일", example = "kevin@naver.com") @RequestParam String email) {
         return name + ", " + email;
     }
 
-    //dto 타입으로 requestParam 데이터를 매핑하는것도 가능하다.
-    @Operation(summary = "dto 타입으로 매핑받기 api")
+    //GET 요청의 requestParam 데이터를 DTO 매핑하는것도 가능하다.
+    @Operation(summary = "dto 타입으로 매핑받고 리턴하기 api")
     @GetMapping("/request-dto")
-    public String getRequestDto(MemberDto dto) {
-        return dto.toString();
+    public MemberDto getRequestDto(MemberDto dto) {
+        return dto;
     }
 
 }
