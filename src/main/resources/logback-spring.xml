@@ -8,29 +8,40 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level][%thread] %logger : %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
+            <level>ERROR</level>
         </filter>
-        <file>${LOG_PAH}/info.log</file>
+        <file>D:/develop/logFile/info.log</file>
         <append>true</append>
+        <!-- 날짜별로 파일 별도저장. gz 확장자로 하면 압축파일로 저장됨.-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PAH}/info_${type}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>D:/develop/logFile/info_${type}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- 최대 보관 일자 -->
             <maxHistory>30</maxHistory>
+            <!-- 최대 파일 크기 설정 -->
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level][%thread] %logger : %msg%n</pattern>
         </encoder>
     </appender>
 
     <!-- TRACE > DEBUG > INFO > WARN > ERROR > OFF -->
     <!-- Root Logger -->
+    <!-- 위에서 설정한 appender 들을 root에 레벨을 지정하여 추가해주면 적용된다.-->
     <root level="INFO">
         <appender-ref ref="console"></appender-ref>
         <appender-ref ref="INFO_LOG"></appender-ref>
     </root>
+
+    <!-- 특정 패키지에 다른 로깅 레벨을 적용하고 싶다면 logger를 사용한다. additivity = 하위패키지 적용여부-->
+    <logger name="com.springboot.api.controller" level="ERROR" additivity="false">
+        <appender-ref ref="console"></appender-ref>
+        <appender-ref ref="INFO_LOG"></appender-ref>
+    </logger>
 </configuration>
