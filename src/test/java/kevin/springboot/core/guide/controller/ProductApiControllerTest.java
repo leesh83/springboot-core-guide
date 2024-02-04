@@ -36,6 +36,7 @@ public class ProductApiControllerTest {
     private MockMvc mockMvc;
 
 
+    //MockBean = mock 객체를 스프링 컨테이너에 등록한 후 주입받는 방식. @WebMvcTest 시 사용한다.
     @MockBean
     private ProductService productService;
 
