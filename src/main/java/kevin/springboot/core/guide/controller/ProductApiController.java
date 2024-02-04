@@ -30,7 +30,7 @@ public class ProductApiController {
 
     @Operation(summary = "단일 상품을 조회한다.")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> findAllProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductResponse> findProductById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findProductById(id));
     }
@@ -44,7 +44,7 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 수정한다.")
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
+    public ResponseEntity<Boolean> updateProduct(@PathVariable Long id,
                                                          @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.updateProduct(id, request));

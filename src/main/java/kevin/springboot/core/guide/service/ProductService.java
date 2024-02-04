@@ -40,10 +40,10 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
+    public boolean updateProduct(Long id, ProductRequest request) {
         Product product = findById(id);
         product.updateProduct(request.getName(), request.getPrice(), request.getStock());
-        return ProductResponse.of(product);
+        return true;
     }
 
     //상품 삭제
