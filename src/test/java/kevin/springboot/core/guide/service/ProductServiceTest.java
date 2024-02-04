@@ -5,7 +5,6 @@ import kevin.springboot.core.guide.dto.ProductResponse;
 import kevin.springboot.core.guide.entity.Product;
 import kevin.springboot.core.guide.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,12 +41,7 @@ public class ProductServiceTest {
         Integer price = 1500;
         Integer stock = 1500;
 
-        Product product = Product.builder()
-                                 .id(id)
-                                 .name(name)
-                                 .price(price)
-                                 .stock(stock)
-                                 .build();
+        Product product = createProduct(id, name, price, stock);
 
         given(productRepository.findAll()).willReturn(List.of(product));
 
@@ -70,12 +64,7 @@ public class ProductServiceTest {
         Integer price = 1500;
         Integer stock = 1500;
 
-        Product product = Product.builder()
-                                 .id(id)
-                                 .name(name)
-                                 .price(price)
-                                 .stock(stock)
-                                 .build();
+        Product product = createProduct(id, name, price, stock);
 
         given(productRepository.findById(id)).willReturn(Optional.of(product));
 
@@ -98,18 +87,9 @@ public class ProductServiceTest {
         Integer price = 1500;
         Integer stock = 1500;
 
-        ProductRequest request = ProductRequest.builder()
-                                               .name(name)
-                                               .price(price)
-                                               .stock(stock)
-                                               .build();
+        ProductRequest request = createProductRequest(name, price, stock);
 
-        Product product = Product.builder()
-                                 .id(id)
-                                 .name(name)
-                                 .price(price)
-                                 .stock(stock)
-                                 .build();
+        Product product = createProduct(id, name, price, stock);
 
         given(productRepository.save(any())).willReturn(product);
 
@@ -132,18 +112,9 @@ public class ProductServiceTest {
         Integer price = 1500;
         Integer stock = 1500;
 
-        ProductRequest request = ProductRequest.builder()
-                                               .name(name)
-                                               .price(price)
-                                               .stock(stock)
-                                               .build();
+        ProductRequest request = createProductRequest(name, price, stock);
 
-        Product product = Product.builder()
-                                 .id(id)
-                                 .name(name)
-                                 .price(price)
-                                 .stock(stock)
-                                 .build();
+        Product product = createProduct(id, name, price, stock);
 
         given(productRepository.findById(id)).willReturn(Optional.of(product));
 
@@ -163,12 +134,7 @@ public class ProductServiceTest {
         Integer price = 1500;
         Integer stock = 1500;
 
-        Product product = Product.builder()
-                                 .id(id)
-                                 .name(name)
-                                 .price(price)
-                                 .stock(stock)
-                                 .build();
+        Product product = createProduct(id, name, price, stock);
 
         given(productRepository.findById(id)).willReturn(Optional.of(product));
 
@@ -190,6 +156,23 @@ public class ProductServiceTest {
 
         //when & then
         assertThrows(IllegalArgumentException.class, () -> productService.findProductById(id));
+    }
+
+    private ProductRequest createProductRequest(String name, Integer price, Integer stock) {
+        return ProductRequest.builder()
+                             .name(name)
+                             .price(price)
+                             .stock(stock)
+                             .build();
+    }
+
+    private Product createProduct(Long id, String name, Integer price, Integer stock) {
+        return Product.builder()
+                      .id(id)
+                      .name(name)
+                      .price(price)
+                      .stock(stock)
+                      .build();
     }
 
 }
