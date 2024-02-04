@@ -1,6 +1,7 @@
 package kevin.springboot.core.guide.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import kevin.springboot.core.guide.dto.ProductRequest;
 import kevin.springboot.core.guide.dto.ProductResponse;
 import kevin.springboot.core.guide.service.ProductService;
@@ -22,12 +23,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@WebMvcTest
+/**
+ * @WebMvcTest(테스트대상 콘트롤러.class) = mvc 요청,응답에 대한 테스트 가능.
+ * @Controller, @RestController, @ControllerAdvice 등의 컨트롤러 관련 빈 객체들이 로드됨.
+ * @SpringBootTest 보다 가벼움.
+ */
 @WebMvcTest(ProductApiController.class)
 public class ProductApiControllerTest {
 
+    //mockMvc : 서블릿컨테이너 구동없이 가상의 MVC환경에서 모의 http 서블릿을 요청하는 유틸클래스.
     @Autowired
     private MockMvc mockMvc;
+
 
     @MockBean
     private ProductService productService;
@@ -91,10 +98,17 @@ public class ProductApiControllerTest {
          */
         given(productService.createProduct(any())).willReturn(response);
 
+        //request를 json 형태로 바꿔주는 방법1. objectMapper 사용
+        String content = objectMapper.writeValueAsString(request);
+
+        //request를 json 형태로 바꿔주는 방법2. Gson 사용
+        //Gson gson = new Gson();
+        //String content = gson.toJson(request);
+
         //when & then
         mockMvc.perform(post("/product")
                        .contentType(MediaType.APPLICATION_JSON) // POST, PUT, PATCH 요청 시 필요
-                       .content(objectMapper.writeValueAsString(request))) // body에 request 데이터 입력
+                       .content(content)) // body에 request 데이터 입력
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.name").exists())
                .andExpect(jsonPath("$.price").exists())
@@ -111,10 +125,12 @@ public class ProductApiControllerTest {
         ProductRequest request = createProductRequest();
         given(productService.updateProduct(any(), any())).willReturn(true);
 
+        String content = objectMapper.writeValueAsString(request);
+
         //when & then
         mockMvc.perform(put("/product/{id}", 1)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(request)))
+                       .content(content))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$").value(true))
                .andDo(print());
