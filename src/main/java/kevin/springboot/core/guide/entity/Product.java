@@ -23,6 +23,9 @@ public class Product extends BaseTimeEntity {
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0 COMMENT '상품 재고'")
     private Integer stock;
 
+    @Column(columnDefinition = "TINYINT NOT NULL DEFAULT 1 COMMENT '유효 상품 여부'")
+    private Boolean isActive;
+
     protected Product() {
     }
 
