@@ -41,12 +41,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameContains(String name);
 
-    List<Product> findByNameStartWith(String name);
+    List<Product> findByNameStartsWith(String name);
 
-    List<Product> findByNameEndWith(String name);
+    List<Product> findByNameEndsWith(String name);
 
+    List<Product> findByNameOrderById(String name);
 
-
-
+    List<Product> findByNameOrderByIdDesc(String name);
 
 }

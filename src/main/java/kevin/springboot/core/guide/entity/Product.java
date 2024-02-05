@@ -30,11 +30,12 @@ public class Product extends BaseTimeEntity {
     }
 
     @Builder
-    public Product(Long id, String name, Integer price, Integer stock) {
+    public Product(Long id, String name, Integer price, Integer stock, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.isActive = isActive;
     }
 
     public void updateProduct(String name, Integer price, Integer stock){
