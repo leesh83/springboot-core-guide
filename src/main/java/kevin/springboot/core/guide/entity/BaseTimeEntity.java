@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class) // JpaAuditing  쓰려면 추가해줘야함.
 @Getter
-@MappedSuperclass
+@MappedSuperclass //Jpa의 엔티티가 상속받을 경우 자식클래스에게 매핑정보를 전달함.
 public class BaseTimeEntity {
     @Column(updatable = false)
     @CreatedDate //엔티티가 생성될때 생성 시간 저장 // @SpringBootApplication 파일에 @EnableJpaAuditing 선언필요

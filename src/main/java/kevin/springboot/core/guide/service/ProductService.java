@@ -3,6 +3,7 @@ package kevin.springboot.core.guide.service;
 import kevin.springboot.core.guide.dto.ProductRequest;
 import kevin.springboot.core.guide.dto.ProductResponse;
 import kevin.springboot.core.guide.entity.Product;
+import kevin.springboot.core.guide.exception.ProductNotFoundException;
 import kevin.springboot.core.guide.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class ProductService {
 
     private Product findById(Long id) {
         Product product = productRepository.findById(id)
-                                           .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다 id : " + id));
+                                           .orElseThrow(() -> new ProductNotFoundException(id));
 
         return product;
     }
