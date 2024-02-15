@@ -43,7 +43,7 @@ public class ProductService {
     @Transactional
     public boolean updateProduct(Long id, ProductRequest request) {
         Product product = findById(id);
-        product.updateProduct(request.getName(), request.getPrice(), request.getStock());
+        product.updateProduct(request.getName(), request.getPrice(), request.getStock(), request.getIsActive());
         return true;
     }
 

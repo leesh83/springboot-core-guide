@@ -24,18 +24,25 @@ public class ProductRequest {
     @Schema(description = "상품 재고", example = "5")
     private Integer stock;
 
+    @NotNull(message = "판매 여부는 필수값 입니다.")
+    @Schema(description = "판매 여부")
+    private Boolean isActive;
+
     @Builder
-    public ProductRequest(String name, Integer price, Integer stock) {
+    public ProductRequest(String name, Integer price, Integer stock, Boolean isActive) {
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.isActive = isActive;
     }
+
 
     public Product toEntity() {
         return Product.builder()
                       .name(name)
                       .price(price)
                       .stock(stock)
+                      .isActive(isActive)
                       .build();
     }
 }

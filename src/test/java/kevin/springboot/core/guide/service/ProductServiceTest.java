@@ -3,6 +3,7 @@ package kevin.springboot.core.guide.service;
 import kevin.springboot.core.guide.dto.ProductRequest;
 import kevin.springboot.core.guide.dto.ProductResponse;
 import kevin.springboot.core.guide.entity.Product;
+import kevin.springboot.core.guide.exception.ProductNotFoundException;
 import kevin.springboot.core.guide.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-//mock 객체 선언 방법2. @ExtendWith(MockitoExtension.class) 와 @Mock 애노테이션을 이용해 mock 객체를 만들 수 있다.
+//mock 객체 선언 방법. @ExtendWith(MockitoExtension.class) 와 @Mock 애노테이션을 이용해 mock 객체를 만들 수 있다.
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
@@ -147,7 +148,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("단일 상품 조회 시 id에 해당하는 상품 없을 시 exception 검증")
+    @DisplayName("단일 상품 조회 시 id에 해당하는 상품 없을 시 ProductNotFoundException 검증")
     void findProductByIdExceptionTest() {
         //given
         Long id = 1L;
@@ -155,7 +156,7 @@ public class ProductServiceTest {
         given(productRepository.findById(id)).willReturn(Optional.ofNullable(null));
 
         //when & then
-        assertThrows(IllegalArgumentException.class, () -> productService.findProductById(id));
+        assertThrows(ProductNotFoundException.class, () -> productService.findProductById(id));
     }
 
     private ProductRequest createProductRequest(String name, Integer price, Integer stock) {

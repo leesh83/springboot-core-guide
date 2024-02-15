@@ -38,9 +38,10 @@ public class Product extends BaseTimeEntity {
         this.isActive = isActive;
     }
 
-    public void updateProduct(String name, Integer price, Integer stock){
+    public void updateProduct(String name, Integer price, Integer stock, Boolean isActive){
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.isActive = isActive;
     }
 }
