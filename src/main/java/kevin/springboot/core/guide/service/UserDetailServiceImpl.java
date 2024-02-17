@@ -1,5 +1,6 @@
 package kevin.springboot.core.guide.service;
 
+import kevin.springboot.core.guide.exception.UserNotFoundException;
 import kevin.springboot.core.guide.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("loadUserByUsername 실행. username : {}", username);
-        return userRepository.findByEmail(username);
+        return userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 }
 
