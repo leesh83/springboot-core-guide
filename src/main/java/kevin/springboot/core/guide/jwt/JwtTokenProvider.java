@@ -22,19 +22,22 @@ import java.util.List;
  * 토큰을 받아와서 검증하고, 토큰에서 유저정보를 조회한 다음 security context에 저장할 인증정보를 생성한다.
  */
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
     private final UserDetailServiceImpl userDetailService;
-
-    @Value("${jwt.secret}")
     private final String secretKey;
-
-    @Value("${jwt.issuer}")
     private final String issuer;
-
-    @Value("${jwt.expire}")
     private final Long tokenVaildMillisecond;
+
+    public JwtTokenProvider(UserDetailServiceImpl userDetailService,
+                            @Value("${jwt.secret}") String secretKey,
+                            @Value("${jwt.issuer}") String issuer,
+                            @Value("${jwt.expire}") Long tokenVaildMillisecond) {
+        this.userDetailService = userDetailService;
+        this.secretKey = secretKey;
+        this.issuer = issuer;
+        this.tokenVaildMillisecond = tokenVaildMillisecond;
+    }
 
     //토큰 생성
     public String createToken(User user) {
@@ -44,7 +47,7 @@ public class JwtTokenProvider {
 
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
-        claims.put("role", user.getAuthorities());
+        //claims.put("role", user.getAuthorities());
 
         String token = Jwts.builder()
                            .setHeaderParam(Header.TYPE, Header.JWT_TYPE) //헤더 : jwt로 설정

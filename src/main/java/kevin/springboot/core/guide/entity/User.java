@@ -35,13 +35,16 @@ public class User implements UserDetails {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+    protected User() {
+    }
+
     @Builder
-    public User(Long id, String email, String password, String name) {
-        this.id = id;
+    public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
     }
+
 
     //계정이 가지고 있는 권한 목록 리턴
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
