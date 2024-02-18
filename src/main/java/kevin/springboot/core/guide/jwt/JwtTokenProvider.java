@@ -3,6 +3,7 @@ package kevin.springboot.core.guide.jwt;
 
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
+import kevin.springboot.core.guide.entity.User;
 import kevin.springboot.core.guide.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * JwtTokenProvider
+ * jwt토큰을 생성하는데 필요한 정보를 userDetails 에서 가져와서 토콘을 생성하고,
+ * 토큰을 받아와서 검증하고, 토큰에서 유저정보를 조회한 다음 security context에 저장할 인증정보를 생성한다.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -23,23 +29,29 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private final String secretKey;
+
     @Value("${jwt.issuer}")
     private final String issuer;
-    private final Long tokenVaildMillisecond = 1000L * 60 * 60;
+
+    @Value("${jwt.expire}")
+    private final Long tokenVaildMillisecond;
 
     //토큰 생성
-    public String createToken(String email, List<String> roles) {
+    public String createToken(User user) {
         log.info("createToken - 시작");
         Date now = new Date();
         Date expire = new Date(now.getTime() + tokenVaildMillisecond);
+
+        Claims claims = Jwts.claims();
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getAuthorities());
 
         String token = Jwts.builder()
                            .setHeaderParam(Header.TYPE, Header.JWT_TYPE) //헤더 : jwt로 설정
                            .setIssuer(issuer)
                            .setIssuedAt(now)
                            .setExpiration(expire)
-                           .setSubject(email) //subject 에 유저식별정보 (email)을 입력
-                           .claim("roles", roles)
+                           .setClaims(claims)
                            .signWith(SignatureAlgorithm.HS256, secretKey) // 서명 : secretKey 로 HS256 방식으로 암호화
                            .compact();
         log.info("createToken - 완료");
@@ -56,20 +68,16 @@ public class JwtTokenProvider {
 
     //token 에서 유저식별정보(email) 을 가져온다.
     public String getUsername(String token) {
-        return getClaims(token).getSubject();
+        return getClaims(token).get("email", String.class);
     }
 
     //토큰에서 클레임을 추출
     private Claims getClaims(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                    .setSigningKey(secretKey)
+                   .build()
                    .parseClaimsJwt(token)
                    .getBody();
-    }
-
-    //http request 헤더에서 token 값 추출
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH_TOKEN");
     }
 
 
@@ -77,13 +85,14 @@ public class JwtTokenProvider {
     public boolean validToken(String token) {
         log.info("validToken -  시작");
         try {
-            return getClaims(token).getExpiration()
-                                   .before(new Date());
+            Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJwt(token);
+            return true;
         } catch (Exception e) {
             log.info("validToken - exception occured : {}", e.getMessage());
             return false; //exception 발생시 유효하지 않은 토큰으로 판단.
         }
     }
-
-
 }
