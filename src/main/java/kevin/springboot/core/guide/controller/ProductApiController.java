@@ -9,6 +9,7 @@ import kevin.springboot.core.guide.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ProductApiController {
 
     @Operation(summary = "모든 상품을 조회한다.")
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ProductResponse>> findAllProduct() {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findAllProduct());

@@ -2,10 +2,12 @@ package kevin.springboot.core.guide.configuration;
 
 import kevin.springboot.core.guide.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,8 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity //Spring Security 설정임을 명시한다.
-@EnableGlobalAuthentication // 어노테이션으로 controller api 보안수준을 설정기능을 활성화 한다.
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @PreAuthorize 어노테이션으로 controller api 보안 설정기능을 활성화 한다.
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

@@ -93,9 +93,18 @@ public class JwtTokenProvider {
                 .build()
                 .parseClaimsJwt(token);
             return true;
-        } catch (Exception e) {
-            log.info("validToken - exception occured : {}", e.getMessage());
-            return false; //exception 발생시 유효하지 않은 토큰으로 판단.
+        } catch (SecurityException | MalformedJwtException e) {
+            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
+            return false;
+        } catch (ExpiredJwtException e) {
+            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
+            return false;
+        } catch (UnsupportedJwtException e) {
+            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
+            return false;
         }
     }
 }

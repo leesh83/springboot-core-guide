@@ -1,6 +1,7 @@
 package kevin.springboot.core.guide.controllerAdvice;
 
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import kevin.springboot.core.guide.dto.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class CustomExceptionHandler {
 
+    @ExceptionHandler(value = JwtException.class)
+    public ResponseEntity<ExceptionResponse> handleJwtException(JwtException e, HttpServletRequest request){
+        log.error("advice 내 handleJwtException 호출 url : {}, exception : {},  message : {}", request.getRequestURI(), e.toString(), e.getMessage());
+
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+
+        ExceptionResponse response = new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage());
+
+        return new ResponseEntity<>(response, new HttpHeaders(), httpStatus);
+    }
+
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRunTimeException(RuntimeException e, HttpServletRequest request){
-        log.error("advice 내 handleException 호출 url : {}, exception message : {}", request.getRequestURI(), e.getMessage());
+        log.error("advice 내 handleRunTimeException 호출 url : {}, exception : {},  message : {}", request.getRequestURI(), e.toString(), e.getMessage());
 
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -28,7 +40,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request){
-        log.error("advice 내 handleMethodArgumentNotValidException 호출 url : {}, exception message : {}", request.getRequestURI(), e.getMessage());
+        log.error("advice 내 handleMethodArgumentNotValidException 호출 url : {}, exception : {}, message : {}", request.getRequestURI(), e.toString(), e.getMessage());
 
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
@@ -37,5 +49,9 @@ public class CustomExceptionHandler {
 
         return new ResponseEntity<>(response, new HttpHeaders(), httpStatus);
     }
+
+
+
+
 
 }

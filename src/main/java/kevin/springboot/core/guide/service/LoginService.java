@@ -5,6 +5,7 @@ import kevin.springboot.core.guide.dto.LoginResponse;
 import kevin.springboot.core.guide.dto.SignUpRequest;
 import kevin.springboot.core.guide.entity.User;
 import kevin.springboot.core.guide.exception.DuplicatedEmailException;
+import kevin.springboot.core.guide.exception.InvalidPasswordException;
 import kevin.springboot.core.guide.exception.UserNotFoundException;
 import kevin.springboot.core.guide.jwt.JwtTokenProvider;
 import kevin.springboot.core.guide.repository.UserRepository;
@@ -44,7 +45,7 @@ public class LoginService {
 
         //패스워드 검증
         if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException();
+            throw new InvalidPasswordException();
         }
 
         //토큰 생성

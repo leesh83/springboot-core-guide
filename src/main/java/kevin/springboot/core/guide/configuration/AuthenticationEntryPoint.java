@@ -23,9 +23,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.info("AuthenticationEntryPoint - commence [인증실패]");
-
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-
         response.setStatus(httpStatus.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
