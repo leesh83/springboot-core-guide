@@ -48,8 +48,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         //인증, 인가 실패 시 사용된 exception handler 추가.
-        http.exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint)
-                                                                       .accessDeniedHandler(accessDeniedHandler));
+        http.exceptionHandling((exceptionHandling) -> exceptionHandling.accessDeniedHandler(accessDeniedHandler));
 
         //권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers(AUTH_WHITELIST).permitAll()

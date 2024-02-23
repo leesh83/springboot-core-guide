@@ -41,7 +41,7 @@ public class JwtTokenProvider {
 
     //토큰 생성
     public String createToken(User user) {
-        log.info("createToken - 시작");
+        log.info("createToken - 시작 secretKey = {}", secretKey);
         Date now = new Date();
         Date expire = new Date(now.getTime() + tokenVaildMillisecond);
 
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
                            .setClaims(claims)
                            .signWith(SignatureAlgorithm.HS256, secretKey) // 서명 : secretKey 로 HS256 방식으로 암호화
                            .compact();
-        log.info("createToken - 완료");
+        log.info("createToken - 완료, token = {}", token);
         return token;
     }
 
@@ -65,7 +65,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         log.info("getAuthentication -  시작");
         UserDetails userDetails = userDetailService.loadUserByUsername(getUsername(token));
-        log.info("getAuthentication -  username 조회 완료 username : {}, authorities : {}", userDetails.getUsername(), userDetails.getAuthorities());
+        log.info("getAuthentication -  조회 완료 username : {}, authorities : {}", userDetails.getUsername(), userDetails.getAuthorities());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -76,35 +76,27 @@ public class JwtTokenProvider {
 
     //토큰에서 클레임을 추출
     private Claims getClaims(String token) {
-        return Jwts.parserBuilder()
+        Claims claims = Jwts.parserBuilder()
                    .setSigningKey(secretKey)
                    .build()
-                   .parseClaimsJwt(token)
+                   .parseClaimsJws(token)
                    .getBody();
+
+        log.info("getClaims - claims: {} ", claims);
+
+        return claims;
     }
 
 
     //jwt 토큰 유효성 검증
-    public boolean validToken(String token) {
-        log.info("validToken -  시작");
-        try {
-            Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJwt(token);
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
-            return false;
-        } catch (ExpiredJwtException e) {
-            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
-            return false;
-        } catch (UnsupportedJwtException e) {
-            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
-            return false;
-        } catch (IllegalArgumentException e) {
-            log.info("validToken - exception occured : {}, message : {}", e, e.getMessage());
-            return false;
-        }
+    public boolean validToken(String token) throws Exception {
+        log.info("validToken -  시작 secretKey = {}, token = {}", secretKey, token);
+
+        Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token); // parseClaimsJwt(token) 시 UnsupportedJwtException "Signed Claims JWSs are not supporte" 가 발생한다.
+
+        return true;
     }
 }

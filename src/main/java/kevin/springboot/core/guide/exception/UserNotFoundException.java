@@ -1,7 +1,7 @@
 package kevin.springboot.core.guide.exception;
 
 
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends CustomException {
 
     private static final String message = "해당 유저가 없습니다. email : ";
 
