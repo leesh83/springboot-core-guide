@@ -2,15 +2,12 @@ package kevin.springboot.core.guide.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kevin.springboot.core.guide.dto.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -27,15 +24,13 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRequestFilter : 한번 실행 보장
     private final JwtTokenProvider jwtTokenProvider;
-
     private static final String authrizationHeaderName = "Authorization";
 
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         log.info("doFilterInternal 시작");
-
         try {
             String authorizationHeader = request.getHeader(authrizationHeaderName);
 
@@ -43,11 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7);
 
-                log.info("doFilterInternal token = {}", token);
-
                 //jwt 토큰 유효성 검증 통과 시
                 if (jwtTokenProvider.validToken(token)) {
-                    //토큰에서 인증정보 불러옴
+                    //토큰에서 인증정보(유저정보) 조회
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
                     //현재 request 의 SecurityContext에 인증정보 저장
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -55,14 +48,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
                 }
             }
             filterChain.doFilter(request, response); // 다음 필터로 넘긴다.
-        }catch (Exception e){
-            log.error("doFilterInternal - exception  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
-            HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-            response.setStatus(httpStatus.value());
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage())));
+        } catch (Exception e) {
+            log.error("doFilterInternal - exception 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
+            //jwt 토큰 유효성 검사 실패 시 401 error response
+            createErrorResponse(response, HttpStatus.UNAUTHORIZED, e);
         }
         log.info("doFilterInternal 종료");
     }
+
+    private void createErrorResponse(HttpServletResponse response, HttpStatus httpStatus, Exception e) throws IOException {
+        response.setStatus(httpStatus.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage())));
+    }
+
+
 }

@@ -32,6 +32,7 @@ public class ProductApiController {
 
     @Operation(summary = "단일 상품을 조회한다.")
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProductResponse> findProductById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findProductById(id));
@@ -39,6 +40,7 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 등록한다.")
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(productService.createProduct(request));
@@ -46,14 +48,16 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 수정한다.")
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Boolean> updateProduct(@PathVariable Long id,
-                                                         @RequestBody @Valid ProductRequest request) {
+                                                 @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.updateProduct(id, request));
     }
 
     @Operation(summary = "상품을 삭제한다.")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.deleteProduct(id));

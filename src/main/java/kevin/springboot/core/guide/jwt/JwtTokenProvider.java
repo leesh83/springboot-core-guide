@@ -1,11 +1,12 @@
 package kevin.springboot.core.guide.jwt;
 
 
-import io.jsonwebtoken.*;
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import kevin.springboot.core.guide.entity.User;
 import kevin.springboot.core.guide.service.UserDetailServiceImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * JwtTokenProvider
@@ -77,26 +77,22 @@ public class JwtTokenProvider {
     //토큰에서 클레임을 추출
     private Claims getClaims(String token) {
         Claims claims = Jwts.parserBuilder()
-                   .setSigningKey(secretKey)
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody();
-
+                            .setSigningKey(secretKey)
+                            .build()
+                            .parseClaimsJws(token)
+                            .getBody();
         log.info("getClaims - claims: {} ", claims);
-
         return claims;
     }
 
 
     //jwt 토큰 유효성 검증
-    public boolean validToken(String token) throws Exception {
+    public boolean validToken(String token) {
         log.info("validToken -  시작 secretKey = {}, token = {}", secretKey, token);
-
         Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(token); // parseClaimsJwt(token) 시 UnsupportedJwtException "Signed Claims JWSs are not supporte" 가 발생한다.
-
         return true;
     }
 }
