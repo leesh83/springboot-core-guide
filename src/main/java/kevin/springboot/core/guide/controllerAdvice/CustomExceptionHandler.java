@@ -17,14 +17,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(value = JwtException.class)
-    public ResponseEntity<ExceptionResponse> handleJwtExceptionException(CustomException e, HttpServletRequest request){
-        log.error("advice 내 handleJwtExceptionException 호출 url : {}, exception : {},  message : {}", request.getRequestURI(), e.toString(), e.getMessage());
-        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-        ExceptionResponse response = new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage());
-        return new ResponseEntity<>(response, new HttpHeaders(), httpStatus);
-    }
-
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<ExceptionResponse> handleCustomException(CustomException e, HttpServletRequest request){
         log.error("advice 내 handleCustomException 호출 url : {}, exception : {},  message : {}", request.getRequestURI(), e.toString(), e.getMessage());

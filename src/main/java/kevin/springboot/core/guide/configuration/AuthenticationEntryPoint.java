@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * 이 클래스는 사용하지 않음.
+ * jwt 토큰 인증 실패 시에도 정상적으로 호출되지 않아서 이클래스는 사용하지않음
  * 대신 jwt 토큰 인증 실패시 JwtAuthenticationFilter 에서 직접 401 response를 만들어서 응답한다.
  */
 @Component

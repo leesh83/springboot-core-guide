@@ -2,6 +2,7 @@ package kevin.springboot.core.guide.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kevin.springboot.core.guide.dto.ExceptionResponse;
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         log.info("doFilterInternal 시작");
         try {
             String authorizationHeader = request.getHeader(authrizationHeaderName);
