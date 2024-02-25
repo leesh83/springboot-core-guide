@@ -47,7 +47,7 @@ public class JwtTokenProvider {
 
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
-        //claims.put("role", user.getAuthorities());
+        claims.put("role", user.getAuthorities());
 
         String token = Jwts.builder()
                            .setHeaderParam(Header.TYPE, Header.JWT_TYPE) //헤더 : jwt로 설정

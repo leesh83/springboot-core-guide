@@ -24,7 +24,6 @@ public class ProductApiController {
 
     @Operation(summary = "모든 상품을 조회한다.")
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ProductResponse>> findAllProduct() {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findAllProduct());
@@ -32,7 +31,6 @@ public class ProductApiController {
 
     @Operation(summary = "단일 상품을 조회한다.")
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProductResponse> findProductById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findProductById(id));
@@ -62,6 +60,4 @@ public class ProductApiController {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.deleteProduct(id));
     }
-
-
 }

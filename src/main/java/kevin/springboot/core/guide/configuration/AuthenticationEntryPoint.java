@@ -25,12 +25,12 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     private final ObjectMapper objectMapper;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.info("AuthenticationEntryPoint - commence [인증실패]");
-        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+        log.info("AuthenticationEntryPoint - commence 인증 실패");
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         response.setStatus(httpStatus.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), "인증실패")));
+        response.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage())));
     }
 }
