@@ -3,15 +3,16 @@ package kevin.springboot.core.guide.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import kevin.springboot.core.guide.enums.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -31,26 +32,30 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER) // 설명 :
+    @Builder.Default // 설명 :
+    @Enumerated(value = EnumType.STRING)
+    private List<UserRole> roles;
 
     protected User() {
     }
 
     @Builder
-    public User(String email, String password, String name) {
+    public User(Long id, String email, String password, String name, List<UserRole> roles) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.roles = roles;
     }
-
 
     //계정이 가지고 있는 권한 목록 리턴
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(role.toString()))
+                    .collect(Collectors.toList());
     }
 
     //계정 패스워드 리턴

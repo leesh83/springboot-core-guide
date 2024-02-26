@@ -1,6 +1,7 @@
 package kevin.springboot.core.guide.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,10 +50,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
                 }
             }
             filterChain.doFilter(request, response); // 다음 필터로 넘긴다.
-        } catch (Exception e) {
-            log.error("doFilterInternal - exception 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
+        } catch (JwtException e) {
+            log.error("doFilterInternal - JwtException 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
             //jwt 토큰 유효성 검사 실패 시 401 error response
             createErrorResponse(response, HttpStatus.UNAUTHORIZED, e);
+        } catch (Exception e) {
+            log.error("doFilterInternal - Exception 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
+            //기타 exception 발생 시 400 error response
+            createErrorResponse(response, HttpStatus.BAD_REQUEST, e);
         }
         log.info("doFilterInternal 종료");
     }

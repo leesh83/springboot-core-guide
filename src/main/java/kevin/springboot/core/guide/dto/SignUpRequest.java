@@ -1,8 +1,12 @@
 package kevin.springboot.core.guide.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import kevin.springboot.core.guide.entity.User;
+import jakarta.validation.constraints.NotNull;
+import kevin.springboot.core.guide.enums.UserRole;
+import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class SignUpRequest {
@@ -15,12 +19,19 @@ public class SignUpRequest {
     @NotBlank(message = "name 은 필수 입력 값 입니다.")
     private String name;
 
+    @NotNull(message = "roles 은 필수 입력 값 입니다.")
+    private List<UserRole> roles;
+
     public SignUpRequest() {
     }
 
-    public SignUpRequest(String email, String password, String name) {
+    @Builder
+    public SignUpRequest(String email, String password, String name, List<UserRole> roles) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.roles = roles;
     }
+
+
 }

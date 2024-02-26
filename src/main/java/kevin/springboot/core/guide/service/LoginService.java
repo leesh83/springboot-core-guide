@@ -27,15 +27,17 @@ public class LoginService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicatedEmailException();
         }
-
-        User user = User.builder()
-                        .email(request.getEmail())
-                        .password(bCryptPasswordEncoder.encode(request.getPassword()))
-                        .name(request.getName())
-                        .build();
-
-        userRepository.save(user);
+        userRepository.save(createUser(request));
         return true;
+    }
+
+    private User createUser(SignUpRequest request) {
+        return User.builder()
+                   .email(request.getEmail())
+                   .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                   .name(request.getName())
+                   .roles(request.getRoles())
+                   .build();
     }
 
     //로그인

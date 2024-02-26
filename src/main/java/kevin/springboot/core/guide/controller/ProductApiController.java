@@ -55,7 +55,7 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 삭제한다.")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')") // hasRole('ADMIN')의 경우 authority에 "ROLE_ADMIN" 의 형태로 저장되어 있어야 매칭된다.
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.deleteProduct(id));
