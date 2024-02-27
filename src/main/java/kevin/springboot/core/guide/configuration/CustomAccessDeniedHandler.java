@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
-    //AccessDeniedException : 액세스 권한이 없는 리소스에 접근할 경우 발생하는 예외 발생 시 403 권한없음 을 response 한다
+    //유저 권한이 불충분한 api에 요청 시 403 FORBIDDEN 을 response 한다
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
         log.info("AccessDeniedHandler - handle 엑세스 권한 없음");

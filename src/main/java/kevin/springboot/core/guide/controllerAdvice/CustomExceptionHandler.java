@@ -34,9 +34,4 @@ public class CustomExceptionHandler {
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return new ResponseEntity<>(response, new HttpHeaders(), httpStatus);
     }
-
-
-
-
-
 }

@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
             createErrorResponse(response, HttpStatus.UNAUTHORIZED, e);
         } catch (Exception e) {
             log.error("doFilterInternal - Exception 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
-            //기타 exception 발생 시 400 error response
+            //기타 exception (UserNotFoundException 등) 발생 시 400 error response
             createErrorResponse(response, HttpStatus.BAD_REQUEST, e);
         }
         log.info("doFilterInternal 종료");

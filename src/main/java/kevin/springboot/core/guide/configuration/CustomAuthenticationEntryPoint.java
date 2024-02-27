@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,14 +21,15 @@ import java.io.IOException;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
 
+    //인증 토큰이 없을 시 401 UNAUTHORIZED 을 response 한다
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         log.info("AuthenticationEntryPoint - commence 인증 실패");
-        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         response.setStatus(httpStatus.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");

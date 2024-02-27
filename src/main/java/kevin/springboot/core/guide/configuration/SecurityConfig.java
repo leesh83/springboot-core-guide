@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AccessDeniedHandler accessDeniedHandler;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     //인증없이 접근 가능한 URL 리스트 설정
     public static final String[] AUTH_WHITELIST = {
@@ -49,8 +48,8 @@ public class SecurityConfig {
 
         //인증, 인가 실패 시 사용된 exception handler 추가.
         http.exceptionHandling((exceptionHandling) -> exceptionHandling
-                //.authenticationEntryPoint((authenticationEntryPoint)) // 제대로 사용이 되지않아서 주석처리함.
-                .accessDeniedHandler(accessDeniedHandler));
+                .authenticationEntryPoint((customAuthenticationEntryPoint)) // 토큰이 없어 인증실패시 401을 리턴하기 위한 핸들러
+                .accessDeniedHandler(customAccessDeniedHandler)); // 권한이 없는 api 호출시 403 을 리턴하기 위한 핸들러
 
         //권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers(AUTH_WHITELIST).permitAll()
