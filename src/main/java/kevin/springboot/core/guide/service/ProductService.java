@@ -3,9 +3,11 @@ package kevin.springboot.core.guide.service;
 import kevin.springboot.core.guide.dto.ProductRequest;
 import kevin.springboot.core.guide.dto.ProductResponse;
 import kevin.springboot.core.guide.entity.Product;
+import kevin.springboot.core.guide.entity.User;
 import kevin.springboot.core.guide.exception.ProductNotFoundException;
 import kevin.springboot.core.guide.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
 
@@ -34,7 +37,8 @@ public class ProductService {
 
     //상품 입력
     @Transactional
-    public ProductResponse createProduct(ProductRequest request) {
+    public ProductResponse createProduct(User user, ProductRequest request) {
+        log.info("createProduct.user = {}", user.toString());
         Product product = productRepository.save(request.toEntity());
         return ProductResponse.of(product);
     }

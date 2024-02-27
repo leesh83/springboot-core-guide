@@ -97,7 +97,7 @@ public class ProductApiControllerTest {
          * .content(objectMapper.writeValueAsString(request)) 로 생성된 request 와
          * given에서 설장한 request를 서로 다른 객체로 인식하여 given().willReturn() 에 설정한 응답값이 오지 않는것으로 보인다.
          */
-        given(productService.createProduct(any())).willReturn(response);
+        given(productService.createProduct(any(), any())).willReturn(response);
 
         //request를 json 형태로 바꿔주는 방법1. objectMapper 사용
         String content = objectMapper.writeValueAsString(request);

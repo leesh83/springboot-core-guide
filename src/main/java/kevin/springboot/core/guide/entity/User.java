@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import kevin.springboot.core.guide.enums.UserRole;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@ToString
 public class User implements UserDetails {
 
     @Id
@@ -33,7 +35,6 @@ public class User implements UserDetails {
     private String name;
 
     @ElementCollection(fetch = FetchType.EAGER) // 설명 :
-    @Builder.Default // 설명 :
     @Enumerated(value = EnumType.STRING)
     private List<UserRole> roles;
 

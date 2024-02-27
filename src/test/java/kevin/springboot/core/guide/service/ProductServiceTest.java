@@ -95,7 +95,7 @@ public class ProductServiceTest {
         given(productRepository.save(any())).willReturn(product);
 
         //when
-        ProductResponse response = productService.createProduct(request);
+        ProductResponse response = productService.createProduct(any(), request);
 
         //then
         Assertions.assertEquals(response.getId(), id);
