@@ -25,9 +25,9 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenProvider {
     private final UserDetailServiceImpl userDetailService;
-    private final String secretKey;
-    private final String issuer;
-    private final Long tokenVaildMillisecond;
+    private final String secretKey; // 토큰 생성시 사용되는 secret key
+    private final String issuer; // 토큰 발행자
+    private final Long tokenVaildMillisecond; // 토큰 유효시간 millisecond
 
     public JwtTokenProvider(UserDetailServiceImpl userDetailService,
                             @Value("${jwt.secret}") String secretKey,
@@ -41,10 +41,10 @@ public class JwtTokenProvider {
 
     //토큰 생성
     public String createToken(User user) {
-        log.info("createToken - 시작 secretKey = {}", secretKey);
         Date now = new Date();
         Date expire = new Date(now.getTime() + tokenVaildMillisecond);
 
+        //토큰 payload 에 들어갈 클레임생성
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
         claims.put("role", user.getAuthorities());
@@ -79,20 +79,20 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parserBuilder()
                             .setSigningKey(secretKey)
                             .build()
-                            .parseClaimsJws(token)
+                            .parseClaimsJws(token) // parseClaimsJwt(token) 시 UnsupportedJwtException "Signed Claims JWSs are not supporte" 가 발생한다.
                             .getBody();
         log.info("getClaims - claims: {} ", claims);
         return claims;
     }
 
 
-    //jwt 토큰 유효성 검증
+    //jwt 토큰 유효성 검증 - secretKey로 파싱을 했을때 exception이 발생하면 실패
     public boolean validToken(String token) {
-        log.info("validToken -  시작 secretKey = {}, token = {}", secretKey, token);
+        log.info("validToken 시작 token : {}", token);
         Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
-            .parseClaimsJws(token); // parseClaimsJwt(token) 시 UnsupportedJwtException "Signed Claims JWSs are not supporte" 가 발생한다.
+            .parseClaimsJws(token);
         return true;
     }
 }

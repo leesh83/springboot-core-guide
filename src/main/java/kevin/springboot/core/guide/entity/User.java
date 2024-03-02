@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER) // 설명 :
+    @ElementCollection(fetch = FetchType.EAGER) // @ElementCollection - userRoles 라는 별도의 테이블이 생성된다.
     @Enumerated(value = EnumType.STRING)
     private List<UserRole> roles;
 
@@ -50,7 +50,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    //계정이 가지고 있는 권한 목록 리턴
+    //계정이 가지고 있는 권한 목록 리턴 (ex. [ADMIN,USER])
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,7 +66,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    //계정의 이름리턴. 일반적으로 유니크한 아이디, 이메일을 리턴합니다.
+    //계정의 이름리턴. 일반적으로 유니크한 로그인 아이디(이메일)을 리턴합니다.
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Override
     public String getUsername() {

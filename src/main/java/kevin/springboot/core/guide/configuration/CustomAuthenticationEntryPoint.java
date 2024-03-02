@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * jwt 토큰 인증 실패 시에도 정상적으로 호출되지 않아서 이클래스는 사용하지않음
- * 대신 jwt 토큰 인증 실패시 JwtAuthenticationFilter 에서 직접 401 response를 만들어서 응답한다.
+ * 인증 토큰이 없을 시 401 UNAUTHORIZED 을 response 한다
  */
 @Component
 @Slf4j
@@ -25,7 +24,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     private final ObjectMapper objectMapper;
 
-    //인증 토큰이 없을 시 401 UNAUTHORIZED 을 response 한다
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         log.info("AuthenticationEntryPoint - commence 인증 실패");

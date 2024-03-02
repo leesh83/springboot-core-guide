@@ -1,7 +1,6 @@
 package kevin.springboot.core.guide.controllerAdvice;
 
 
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import kevin.springboot.core.guide.dto.ExceptionResponse;
 import kevin.springboot.core.guide.exception.CustomException;

@@ -31,6 +31,7 @@ public class LoginService {
         return true;
     }
 
+    //유저생성
     private User createUser(SignUpRequest request) {
         return User.builder()
                    .email(request.getEmail())

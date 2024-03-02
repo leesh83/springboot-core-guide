@@ -14,13 +14,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * api 요청 시 유저 권한이 맞지 않을 경우 403 FORBIDDEN 을 response 한다
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
-    //유저 권한이 불충분한 api에 요청 시 403 FORBIDDEN 을 response 한다
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
         log.info("AccessDeniedHandler - handle 엑세스 권한 없음");

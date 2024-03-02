@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "상품 API", description = "상품 API 입니다.")
 @RequestMapping("/product")
-@PreAuthorize("isAuthenticated()") // 인증된 사용자에게만 api 응답이 가능하다.
+@PreAuthorize("isAuthenticated()") // 이 컨트롤러의 api 들은 인증된 사용자에게만 api 응답이 가능하다.
 @Slf4j
 public class ProductApiController {
 
@@ -29,6 +29,7 @@ public class ProductApiController {
 
     @Operation(summary = "모든 상품을 조회한다.")
     @GetMapping
+    @PreAuthorize("isAuthenticated()") // 메소드별로도 적용 가능
     public ResponseEntity<List<ProductResponse>> findAllProduct(@AuthenticationPrincipal User user) {
         // @AuthenticationPrincipal 를 통해 현재 인증된 사용자 정보를 가져 올 수 있다.
         // 매핑 받는 객체인 User가 UserDetails 를 implement로 구현한 객체일 경우 가능하다.
@@ -46,7 +47,7 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 등록한다.")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")  // hasRole('ADMIN')의 경우 authority에 "ROLE_권한명" 의 형태로 저장되어 있어야 매칭된다.
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")  // hasRole('ADMIN')의 경우 authority에 "ROLE_권한명" 의 형태로 저장되어 있어야 매칭된다.
     public ResponseEntity<ProductResponse> createProduct(@AuthenticationPrincipal User user, @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(productService.createProduct(user, request));
@@ -54,7 +55,7 @@ public class ProductApiController {
 
     @Operation(summary = "상품을 수정한다.")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<Boolean> updateProduct(@PathVariable Long id,
                                                  @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.OK)

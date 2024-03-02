@@ -19,12 +19,12 @@ import java.io.IOException;
 
 /**
  * JwtAuthenticationFilter
- * jwt토큰으로 인증하고, SecurityContextHolder에 인증정보를 저장한다.
+ * api 요청 헤더에서 jwt토큰을 읽어 토큰을 검증, 조회 하고, SecurityContextHolder에 인증정보를 저장한다.
  */
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRequestFilter : 한번 실행 보장
+public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRequestFilter : 필터 한번 실행 보장
     private final JwtTokenProvider jwtTokenProvider;
     private static final String authrizationHeaderName = "Authorization";
 
@@ -38,22 +38,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
 
             //jwt 토큰이 헤더에 있는 경우
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                String token = authorizationHeader.substring(7);
+                String token = authorizationHeader.substring(7); // 앞에 "Bearer " 제거
 
-                //jwt 토큰 유효성 검증 통과 시
+                //jwt 토큰 유효성 검증 실행
                 if (jwtTokenProvider.validToken(token)) {
                     //토큰에서 인증정보(유저정보) 조회
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
+
                     //현재 request 의 SecurityContext에 인증정보 저장
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.info("doFilterInternal - SecurityContextHolder에 인증정보 저장");
+                    log.info("doFilterInternal - SecurityContextHolder에 인증정보 저장 완료");
                 }
             }
             filterChain.doFilter(request, response); // 다음 필터로 넘긴다.
+
         } catch (JwtException e) {
             log.error("doFilterInternal - JwtException 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
             //jwt 토큰 유효성 검사 실패 시 401 error response
             createErrorResponse(response, HttpStatus.UNAUTHORIZED, e);
+
         } catch (Exception e) {
             log.error("doFilterInternal - Exception 발생  : {},  message : {}", request.getRequestURI(), e, e.getMessage());
             //기타 exception (UserNotFoundException 등) 발생 시 400 error response
@@ -68,6 +71,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(httpStatus.value(), httpStatus.getReasonPhrase(), e.getMessage())));
     }
-
-
 }
