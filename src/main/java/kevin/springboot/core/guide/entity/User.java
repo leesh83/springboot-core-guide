@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @ToString
-public class User implements UserDetails {
+public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

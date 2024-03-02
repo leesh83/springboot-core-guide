@@ -8,7 +8,7 @@ import lombok.Getter;
 @Entity
 @Getter
 //@Table(name = "product") //엔티티명과 테이블명이 다를경우 명시
-public class Product extends BaseTimeEntity {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
