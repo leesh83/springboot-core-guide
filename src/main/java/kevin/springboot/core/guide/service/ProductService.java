@@ -38,7 +38,6 @@ public class ProductService {
     //상품 입력
     @Transactional
     public ProductResponse createProduct(User user, ProductRequest request) {
-        log.info("createProduct.user = {}", user.toString());
         Product product = productRepository.save(request.toEntity());
         return ProductResponse.of(product);
     }

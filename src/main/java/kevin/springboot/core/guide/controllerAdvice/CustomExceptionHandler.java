@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class CustomExceptionHandler {
 
+    //CustomException 과 하위클래스 예외들을 캐치하여 응답을 만든다.
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<ExceptionResponse> handleCustomException(CustomException e, HttpServletRequest request){
         log.error("advice 내 handleCustomException 호출 url : {}, exception : {},  message : {}", request.getRequestURI(), e.toString(), e.getMessage());
