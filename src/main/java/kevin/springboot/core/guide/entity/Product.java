@@ -23,7 +23,7 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "INT NOT NULL COMMENT '재고'")
     private Integer stock;
 
-    @Column(columnDefinition = "TINYINT NOT NULL DEFAULT 1 COMMENT '활성화여부'")
+    @Column(columnDefinition = "TINYINT(1) NOT NULL DEFAULT 1 COMMENT '활성화여부'") // Boolean 타입과 DB -tinyint 타입간 validate 오류를 막기위해 tinyint(1) 로 지정해야함.
     private Boolean isActive;
 
     protected Product() {

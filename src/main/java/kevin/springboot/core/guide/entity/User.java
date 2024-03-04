@@ -34,7 +34,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(columnDefinition = "VARCHAR(50) NOT NULL COMMENT '이름'")
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER) // @ElementCollection - user_roles 라는 별도의 테이블이 생성된다.
+    @ElementCollection(fetch = FetchType.EAGER) // @ElementCollection - user_roles [컬럼: user_id, roles]라는 별도의 테이블이 생성된다.
+    @Column(columnDefinition = "VARCHAR(50)") //Enum 타입과 DB-VARCHAR 타입간의 validate 오류방지
     @Enumerated(value = EnumType.STRING)
     private List<UserRole> roles;
 

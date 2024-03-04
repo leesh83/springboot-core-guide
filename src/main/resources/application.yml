@@ -12,7 +12,7 @@ springdoc:
 spring:
   jpa:
     hibernate:
-      ddl-auto: none # create, create-drop, update, validate, none # JPA를 통해 실행되는 ddl 옵션. flyway를 통해서 테이블 생성할 것이므로 none 으로 변경함.
+      ddl-auto: validate # create, create-drop, update, validate, none # JPA를 통해 실행되는 ddl 옵션. flyway를 통해서 테이블 생성할 것이므로 validate 으로 변경함.
     #콘솔에 SQL 출력
     show-sql: true
     properties:
