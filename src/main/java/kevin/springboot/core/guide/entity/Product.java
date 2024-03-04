@@ -14,16 +14,16 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "VARCHAR(50) NOT NULL comment '상품명'")
+    @Column(columnDefinition = "VARCHAR(500) NOT NULL COMMENT '상품명'")
     private String name;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0 COMMENT '상품 가격'")
+    @Column(columnDefinition = "INT NOT NULL COMMENT '가격(원)'")
     private Integer price;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 0 COMMENT '상품 재고'")
+    @Column(columnDefinition = "INT NOT NULL COMMENT '재고'")
     private Integer stock;
 
-    @Column(columnDefinition = "TINYINT NOT NULL DEFAULT 1 COMMENT '유효 상품 여부'")
+    @Column(columnDefinition = "TINYINT NOT NULL DEFAULT 1 COMMENT '활성화여부'")
     private Boolean isActive;
 
     protected Product() {
@@ -38,7 +38,7 @@ public class Product extends BaseEntity {
         this.isActive = isActive;
     }
 
-    public void updateProduct(String name, Integer price, Integer stock, Boolean isActive){
+    public void updateProduct(String name, Integer price, Integer stock, Boolean isActive) {
         this.name = name;
         this.price = price;
         this.stock = stock;

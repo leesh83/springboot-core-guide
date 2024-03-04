@@ -40,14 +40,15 @@ public class ProductApiController {
 
     @Operation(summary = "단일 상품을 조회한다.")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> findProductById(@AuthenticationPrincipal User user, @PathVariable Long id) {
+    public ResponseEntity<ProductResponse> findProductById(@AuthenticationPrincipal User user, @PathVariable(name = "id") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.findProductById(id));
     }
 
     @Operation(summary = "상품을 등록한다.")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")  // hasRole('ADMIN')의 경우 authority에 "ROLE_권한명" 의 형태로 저장되어 있어야 매칭된다.
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    // hasRole('ADMIN')의 경우 authority에 "ROLE_권한명" 의 형태로 저장되어 있어야 매칭된다.
     public ResponseEntity<ProductResponse> createProduct(@AuthenticationPrincipal User user, @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(productService.createProduct(user, request));
@@ -56,7 +57,7 @@ public class ProductApiController {
     @Operation(summary = "상품을 수정한다.")
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseEntity<Boolean> updateProduct(@PathVariable Long id,
+    public ResponseEntity<Boolean> updateProduct(@PathVariable(name = "id") Long id,
                                                  @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.updateProduct(id, request));
@@ -65,7 +66,7 @@ public class ProductApiController {
     @Operation(summary = "상품을 삭제한다.")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Boolean> deleteProduct(@AuthenticationPrincipal User user, @PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteProduct(@AuthenticationPrincipal User user, @PathVariable(name = "id") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(productService.deleteProduct(id));
     }

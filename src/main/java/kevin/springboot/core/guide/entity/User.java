@@ -24,17 +24,17 @@ public class User extends BaseTimeEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(100) NOT NULL COMMENT '이메일'", unique = true)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Column(nullable = false)
+    @Column(columnDefinition = "VARCHAR(500) NOT NULL COMMENT '패스워드")
     private String password;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "VARCHAR(50) NOT NULL COMMENT '이름'")
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER) // @ElementCollection - userRoles 라는 별도의 테이블이 생성된다.
+    @ElementCollection(fetch = FetchType.EAGER) // @ElementCollection - user_roles 라는 별도의 테이블이 생성된다.
     @Enumerated(value = EnumType.STRING)
     private List<UserRole> roles;
 

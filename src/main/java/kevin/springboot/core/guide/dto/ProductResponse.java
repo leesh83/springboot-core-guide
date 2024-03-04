@@ -21,6 +21,9 @@ public class ProductResponse {
     @Schema(description = "상품 재고", example = "5")
     private Integer stock;
 
+    @Schema(description = "활성화 여부")
+    private Boolean isActive;
+
     @Schema(description = "등록 일자")
     private LocalDateTime createdAt;
 
@@ -28,12 +31,12 @@ public class ProductResponse {
     private LocalDateTime updatedAt;
 
     @Builder
-    public ProductResponse(Long id, String name, Integer price, Integer stock,
-                           LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ProductResponse(Long id, String name, Integer price, Integer stock, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -45,7 +48,8 @@ public class ProductResponse {
                               .name(product.getName())
                               .price(product.getPrice())
                               .stock(product.getStock())
-                              .createdAt(product.getCreateAt())
+                              .isActive(product.getIsActive())
+                              .createdAt(product.getCreatedAt())
                               .updatedAt(product.getUpdatedAt())
                               .build();
     }

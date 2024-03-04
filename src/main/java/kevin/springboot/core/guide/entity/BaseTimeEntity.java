@@ -17,7 +17,7 @@ public class BaseTimeEntity {
 
     @CreatedDate //엔티티가 생성될때 생성 시간 저장
     @Column(updatable = false, nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate //엔티티가 수정될때 수정시간 저장
     @Column(nullable = false)
