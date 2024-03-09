@@ -43,17 +43,20 @@ public class JwtTokenProvider {
     public String createToken(User user) {
         Date now = new Date();
         Date expire = new Date(now.getTime() + tokenVaildMillisecond);
-
+        log.info("createToken - expire = {}", expire);
         //토큰 payload 에 들어갈 클레임생성
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
         claims.put("role", user.getAuthorities());
+        claims.put("exp", expire.getTime()); // 토큰 만료 기한 ms
+        claims.put("issuer", issuer);
+        claims.put("issuerAt", now.getTime()); // 토큰 발행 시간 ms
 
         String token = Jwts.builder()
                            .setHeaderParam(Header.TYPE, Header.JWT_TYPE) //헤더 : jwt로 설정
-                           .setIssuer(issuer)
-                           .setIssuedAt(now)
-                           .setExpiration(expire)
+//                           .setIssuer(issuer)
+//                           .setIssuedAt(now)
+//                           .setExpiration(expire) // setExpiration 로는 payload에 유효시간이 담기지않는다. claims 에 "exp" 로 넣어줘야 설정됨..
                            .setClaims(claims)
                            .signWith(SignatureAlgorithm.HS256, secretKey) // 서명 : secretKey 로 HS256 방식으로 암호화
                            .compact();
