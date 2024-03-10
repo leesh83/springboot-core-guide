@@ -48,9 +48,9 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
         claims.put("role", user.getAuthorities());
-        claims.put("exp", expire.getTime()); // 토큰 만료 기한 ms
+        claims.put("exp", expire); // 토큰 만료 기한 (초) 초 단위로 입력되야 만료체크 됨.
         claims.put("issuer", issuer);
-        claims.put("issuerAt", now.getTime()); // 토큰 발행 시간 ms
+        claims.put("issuerAt", now); // 토큰 발행 시간 (밀리초)
 
         String token = Jwts.builder()
                            .setHeaderParam(Header.TYPE, Header.JWT_TYPE) //헤더 : jwt로 설정
