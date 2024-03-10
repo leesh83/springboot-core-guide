@@ -7,9 +7,11 @@ import kevin.springboot.core.guide.entity.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
+@ToString // aop 로그에 표시하기 위해 적용
 public class ProductRequest {
 
     @NotBlank(message = "상품명은 필수값 입니다.")

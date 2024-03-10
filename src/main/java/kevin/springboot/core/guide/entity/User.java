@@ -1,6 +1,7 @@
 package kevin.springboot.core.guide.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import kevin.springboot.core.guide.enums.UserRole;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@ToString
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
@@ -27,7 +27,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(columnDefinition = "VARCHAR(100) NOT NULL COMMENT '이메일'", unique = true)
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "VARCHAR(500) NOT NULL COMMENT '패스워드")
     private String password;
 
@@ -100,5 +99,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    //aop 로깅용
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

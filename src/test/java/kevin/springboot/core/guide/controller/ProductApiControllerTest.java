@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc //mockMvc 사용하기 위해 적용
-@Transactional // 테스트 과정에서 DB입력, 수정내역 모두 rollback 처리
+@Transactional // 테스트 과정에서 DB 변경내역 모두 rollback 처리
 public class ProductApiControllerTest {
 
     //mockMvc : 서블릿컨테이너 구동없이 가상의 MVC환경에서 모의 http 서블릿을 요청하는 유틸클래스.

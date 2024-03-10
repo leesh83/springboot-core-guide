@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import kevin.springboot.core.guide.entity.Product;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 public class ProductResponse {
     @Schema(description = "상품id")
     private Long id;
