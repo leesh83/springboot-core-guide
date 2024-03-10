@@ -13,3 +13,5 @@
 6. ExcptionHandler + CustomException 으로 예외 처리, 응답
 7. Jwt 를 이용해 로그인(토큰발급), API 인증 인가 프로세스 구축
 8. Jpa Auditing 으로 도메인에 등록일자, 등록자 자동 입력
+9. Flyway로 DB migration 관리 설정
+10. AOP 기능활용 (api - userActionLog 로깅 구축)
